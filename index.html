@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AYaka 导航页</title>
+    <link rel="icon" href="https://image.ayaka0.top/file/1754200173748_1754199767568.webp" type="image/webp">
+    <style>
+        /* 定义CSS变量，用于主题切换 */
+        :root {
+            --bg-color: #ecf0f3;
+            --card-bg: #ecf0f3;
+            --text-color: #333;
+            --primary: #7f5af0;
+            --shadow-light: #ffffff;
+            --shadow-dark: #d1d9e6;
+            --card-shadow: 10px 10px 20px var(--shadow-dark), -10px -10px 20px var(--shadow-light);
+            --inset-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light);
+            --transition: all 0.3s ease;
+            --footer-text: #666;
+        }
+
+        /* 深色模式变量 */
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --primary: #7f5af0;
+            --shadow-light: rgba(255,255,255,0.05);
+            --shadow-dark: rgba(0,0,0,0.5);
+            --footer-text: #aaa;
+        }
+
+        /* 跟随系统主题 */
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg-color: #121212;
+                --card-bg: #1e1e1e;
+                --text-color: #e0e0e0;
+                --primary: #7f5af0;
+                --shadow-light: rgba(255,255,255,0.05);
+                --shadow-dark: rgba(0,0,0,0.5);
+                --footer-text: #aaa;
+            }
+        }
+
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            box-shadow: var(--card-shadow);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .theme-toggle:active {
+            box-shadow: var(--inset-shadow);
+        }
+
+        .theme-icon {
+            font-size: 1.5rem;
+        }
+
+        /* 头部区域 */
+        .header {
+            text-align: center;
+            margin: 50px 0 40px;
+            padding: 0 20px;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            object-fit: cover;
+            box-shadow: var(--card-shadow);
+            border: 3px solid var(--card-bg);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            color: var(--primary);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 600px;
+        }
+
+        /* 卡片容器 */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1200px;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        /* 卡片样式 */
+        .card {
+            width: 300px;
+            height: 200px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-color);
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 15px 15px 30px var(--shadow-dark), -15px -15px 30px var(--shadow-light);
+        }
+
+        .card:active {
+            box-shadow: var(--inset-shadow);
+        }
+
+        .card img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            border-radius: 16px;
+            background: var(--card-bg);
+            box-shadow: var(--card-shadow);
+            padding: 8px;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-align: center;
+        }
+
+        /* 页脚样式 */
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: var(--footer-text);
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+        }
+
+        footer a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        footer a:hover::after {
+            width: 100%;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .card {
+                width: 100%;
+                max-width: 400px;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .avatar {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .title {
+                font-size: 1.8rem;
+            }
+            
+            .card {
+                height: 180px;
+            }
+            
+            .card img {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .card h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="themeToggle" class="theme-toggle">
+        <span id="themeIcon" class="theme-icon">🌙</span>
+    </button>
+
+    <header class="header">
+        <img src="https://image.ayaka0.top/file/1754200173748_1754199767568.webp" alt="头像" class="avatar">
+        <h1 class="title">AYaka 导航中心</h1>
+        <p class="subtitle">精选站点导航，一键直达您需要的平台</p>
+    </header>
+
+    <div class="container">
+        <a href="https://blog.ayaka0.top/" class="card" target="_blank">
+            <img src="https://image.ayaka0.top/file/1754200173748_1754199767568.webp" alt="AYaka Blog">
+            <h2>AYaka Blog</h2>
+            <p>技术分享与个人随笔</p>
+        </a>
+        
+        <a href="https://image.ayaka0.top/" class="card" target="_blank">
+            <img src="https://image.ayaka0.top/file/1754738431842_图凌-512x512.png.webp" alt="AYaka图床">
+            <h2>AYaka图床</h2>
+            <p>稳定高效的图片托管服务</p>
+        </a>
+        
+        <a href="https://ao3.ayaka0.top/" class="card" target="_blank">
+            <img src="https://image.ayaka0.top/file/1754738503035_OIP-C.webp" alt="AO3镜像站">
+            <h2>AO3镜像站</h2>
+            <p>便捷的同人作品阅读平台</p>
+        </a>
+    </div>
+
+    <footer>
+        <a class="link text-[var(--primary)] font-medium" target="_blank" href="https://icp.gov.moe/?keyword=20245060">萌ICP备20250803号</a>
+    </footer>
+
+    <script>
+        // 获取DOM元素
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const body = document.body;
+        
+        // 检查本地存储的主题设置
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            body.setAttribute('data-theme', savedTheme);
+            themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        } else {
+            // 检查系统主题偏好
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (systemPrefersDark) {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.textContent = '🌙';
+            }
+        }
+        
+        // 主题切换功能
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            if (currentTheme === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // 监听系统主题变化
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (!localStorage.getItem('theme')) {
+                if (e.matches) {
+                    body.setAttribute('data-theme', 'dark');
+                    themeIcon.textContent = '☀️';
+                } else {
+                    body.setAttribute('data-theme', 'light');
+                    themeIcon.textContent = '🌙';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
